@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "django-2-daoolet"
+version = "0.1.0"
+description = ""
+authors = ["daoolet-honeywell <daulet.khabidullin@honeywell.com>"]
+readme = "README.md"
+packages = [{include = "django_2_daoolet"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+django = "^4.2.4"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
