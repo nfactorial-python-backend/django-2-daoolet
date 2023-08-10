@@ -1,0 +1,11 @@
+<body>
+    <ol>
+    {% for i in news %}
+        <li>
+            <a href="{% url 'detail' i.id %}">
+                {{ i.title }}
+            </a>
+        </li>
+    {% endfor %}
+    </ol>
+</body>
