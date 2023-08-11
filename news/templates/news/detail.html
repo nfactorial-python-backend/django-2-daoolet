@@ -6,7 +6,7 @@
     <title>Details</title>
 </head>
 <body>
-    <a href="{% url 'index' %}"> Show all news</a>
+    <a href="{% url 'news:index' %}"> Show all news</a>
     <h1>Title: {{ news.title }}</h1>
     <h3>Content: {{ news.content }}</h3>
     <h3>Created at: {{ news.created_at }}</h3>

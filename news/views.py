@@ -1,5 +1,6 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 
 from .models import News, Comment
 
@@ -15,7 +16,7 @@ def detail(request, news_id):
         content = request.POST["content"]
         comment = Comment(content=content, news_id=news_id)
         comment.save()
-        return HttpResponseRedirect(f"/news/{news.id}")
+        return HttpResponseRedirect(reverse("news:detail", args=(news_id,)))
     
     coms = news.comments.all()
     context = {"news": news, "coms": coms[::-1]}
@@ -31,6 +32,6 @@ def create_news(request):
             content=content,
         )
         news.save()
-        return HttpResponseRedirect(f"/news/{news.id}")
+        return HttpResponseRedirect(reverse("news:detail", args=(news.id, )))
 
     return render(request, "news/post_news.html")
