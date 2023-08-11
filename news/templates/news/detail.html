@@ -1,5 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Details</title>
+</head>
 <body>
-    <h1>Title: {{ news_detail.title }}</h1>
-    <h3>Content: {{ news_detail.content }}</h3>
-    <h3>Created at: {{ news_detail.created_at }}</h3>
+    <a href="{% url 'index' %}"> Show all news</a>
+    <h1>Title: {{ news.title }}</h1>
+    <h3>Content: {{ news.content }}</h3>
+    <h3>Created at: {{ news.created_at }}</h3>
+    <br>
+    <h3>Comments</h3>
+    <ul>
+        {% for i in coms %}
+            <li>
+                {{i.content}} - {{ i.created_at }}
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <h3>Add Comment</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label for="content">Text:</label>
+        <textarea name="content" required></textarea><br>
+        <br>
+        <button type="submit">Add comment</button>
+    </form>
+
 </body>
+</html>

@@ -1,7 +1,7 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from .models import News
+from .models import News, Comment
 
 # Create your views here.
 def index(request):
@@ -10,8 +10,15 @@ def index(request):
     return render(request, "news/index.html", context)
 
 def detail(request, news_id):
-    news_detail = get_object_or_404(News, pk=news_id)
-    context = {"news_detail": news_detail}
+    news = get_object_or_404(News, pk=news_id)
+    if request.method == "POST":
+        content = request.POST["content"]
+        comment = Comment(content=content, news_id=news_id)
+        comment.save()
+        return HttpResponseRedirect(f"/news/{news.id}")
+    
+    coms = news.comments.all()
+    context = {"news": news, "coms": coms[::-1]}
     return render(request, "news/detail.html", context)
 
 def create_news(request):
