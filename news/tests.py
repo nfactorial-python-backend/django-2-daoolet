@@ -41,7 +41,7 @@ class NewsViewTests(TestCase):
         n1.save()
 
         url = reverse("news:detail", args=(n1.id, ))
-        expected_url = f"/news/102/{n1.id}/"
+        expected_url = f"/news/{n1.id}/"
         self.assertEqual(url, expected_url)
 
         response = self.client.get(reverse("news:detail", args=(n1.id, )))
