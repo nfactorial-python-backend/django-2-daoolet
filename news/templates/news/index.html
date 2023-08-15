@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News</title>
-</head>
-<body>
+{% extends "news/base.html" %}
+
+{% block title %} News {% endblock %}
+
+{% block content %}
     <a href="{% url 'news:create_news' %}"> Add news</a>
     <ol>
     {% for i in news %}
@@ -16,5 +13,4 @@
         </li>
     {% endfor %}
     </ol>
-</body>
-</html>
+{% endblock %}

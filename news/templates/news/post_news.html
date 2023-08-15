@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add news</title>
-</head>
-<body>
+{% extends "news/base.html" %}
+
+{% block title %} Add News {% endblock %}
+
+{% block content %} 
     <h1>Add News</h1>
     <form method="post">
         {% csrf_token %}
@@ -17,5 +14,4 @@
         <br>
         <button type="submit">Add News</button>
     </form>
-</body>
-</html>
+{% endblock %}

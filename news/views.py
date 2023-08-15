@@ -1,8 +1,11 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.views import View
+
 
 from .models import News, Comment
+from .forms import NewsForm
 
 # Create your views here.
 def index(request):
@@ -24,14 +27,27 @@ def detail(request, news_id):
 
 def create_news(request):
     if request.method == "POST":
-        title = request.POST["title"]
-        content = request.POST["content"]
+        create_form = NewsForm(request.POST)
+        if create_form.is_valid():
+            news = create_form.save()
 
-        news = News(
-            title=title,
-            content=content,
-        )
-        news.save()
         return HttpResponseRedirect(reverse("news:detail", args=(news.id, )))
 
     return render(request, "news/post_news.html")
+
+
+class UpdateNews(View):
+
+    def get(self, request, news_id):
+        current_news = get_object_or_404(News, pk=news_id)
+        update_form = NewsForm(instance=current_news)
+        return render(request, "news/update_news.html", {"update_form": update_form})
+
+    def post(self, request, news_id):
+        updated_news = get_object_or_404(News, pk=news_id)
+        updated_form = NewsForm(request.POST, instance=updated_news)
+
+        if updated_form.is_valid():
+            updated_form.save()
+
+        return HttpResponseRedirect(reverse("news:detail", args=(news_id,)))

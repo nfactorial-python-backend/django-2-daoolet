@@ -1,0 +1,13 @@
+{% extends "news/base.html" %}
+
+{% block title %} Update News {% endblock %}
+
+{% block content %} 
+    <a href="{% url 'news:index' %}"> Show all news</a>
+    <br><br>
+    <form method="post">
+        {% csrf_token %}
+        {{ update_form }}
+        <button type="submit">Update news</button>
+    </form>
+{% endblock %} 

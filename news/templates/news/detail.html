@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Details</title>
-</head>
-<body>
+{% extends "news/base.html" %}
+
+{% block title %} Details {% endblock %}
+
+{% block content %}
     <a href="{% url 'news:index' %}"> Show all news</a>
     <h1>Title: {{ news.title }}</h1>
     <h3>Content: {{ news.content }}</h3>
@@ -19,8 +16,7 @@
             </li>
         {% endfor %}
     </ul>
-
-
+    
     <h3>Add Comment</h3>
     <form method="post">
         {% csrf_token %}
@@ -29,6 +25,4 @@
         <br>
         <button type="submit">Add comment</button>
     </form>
-
-</body>
-</html>
+{% endblock %}
