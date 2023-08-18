@@ -14,10 +14,19 @@
             <li>
                 {{i.content}} - {{ i.created_at }}
             </li>
+
+            {% if user == comment.author %}
+            <form action="{% url 'news:delete_comment' i.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Удалить</button>
+            </form>
+            {% endif %}
+            
         {% endfor %}
     </ul>
-    
+
     <h3>Add Comment</h3>
+    {% if user.is_authenticated %}
     <form method="post">
         {% csrf_token %}
         <label for="content">Text:</label>
@@ -25,4 +34,7 @@
         <br>
         <button type="submit">Add comment</button>
     </form>
+    {% else %}
+        <p>Доступно для авторизованных</p>
+    {% endif %}
 {% endblock %}

@@ -7,6 +7,12 @@
 </head>
 <body>
     <main>
+        {% if user.is_authenticated %}
+            <span class="navbar-text">
+                Авторизован как @{{ user.username }}
+            </span><br>
+        {% endif %}
+        
         {% block content %} {% endblock %}
     </main>
 </body>
