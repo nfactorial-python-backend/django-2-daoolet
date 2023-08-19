@@ -10,5 +10,5 @@ urlpatterns = [
     path("<int:news_id>/edit/", views.UpdateNews.as_view(), name="update_news"),
     path("<int:news_id>/", views.UpdateNews.as_view(), name="updated_news"),
     path("<int:news_id>/delete", views.delete_news, name="delete_news"),
-    path("<int:comment_id>/delete", views.delete_comment, name="delete_comment")
+    path("<int:news_id>/detail/<int:comment_id>/delete", views.delete_comment, name="delete_comment")
 ]

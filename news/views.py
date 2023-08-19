@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 
 from .models import News, Comment
-from .forms import NewsForm, SignUpForm
+from .forms import NewsForm, SignUpForm, CommentForm
 
 # Create your views here.
 def index(request):
@@ -20,9 +20,17 @@ def index(request):
 # @permission_required("news.add_comments", login_url="/login")
 def detail(request, news_id):
     news = get_object_or_404(News, pk=news_id)
-    if request.method == "POST":
-        content = request.POST["content"]
-        comment = Comment(content=content, news_id=news_id, author=request.user)
+    # if request.method == "POST":
+    #     content = request.POST["content"]
+    #     comment = Comment(content=content, news_id=news_id, author=request.user)
+    #     comment.save()
+    #     return HttpResponseRedirect(reverse("news:detail", args=(news_id,)))
+    
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.news_id = news_id
+        comment.author = request.user
         comment.save()
         return HttpResponseRedirect(reverse("news:detail", args=(news_id,)))
     
@@ -38,7 +46,7 @@ def create_news(request):
         if form.is_valid():
             news = form.save(commit=False)
             news.author = request.user
-            print(request.user)
+            # print(request.user)
             news.save()
             return HttpResponseRedirect(reverse("news:detail", args=(news.id, )))
 
@@ -83,16 +91,17 @@ def sign_up(request):
 def delete_news(request, news_id):
     news = get_object_or_404(News, pk=news_id)
     if request.method == "POST":
+        print(request.user)
         if request.user == news.author or request.user.has_perm("news.delete_news"):
             news.delete()
     
     return redirect(reverse("news:index"))
 
 
-def delete_comment(request, comment_id):
+def delete_comment(request, news_id, comment_id):
+    news = get_object_or_404(News, pk=news_id)
     coms = get_object_or_404(Comment, pk=comment_id)
     if request.method == "POST":
         if request.user == coms.author or request.user.has_perm("comment.delete_comment"):
             coms.delete()
-    
-    return redirect(reverse("news:detial", args=(coms.news_id,)))
+    return redirect(reverse("news:detail", args=(news.id, )))

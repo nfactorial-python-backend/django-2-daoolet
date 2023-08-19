@@ -3,7 +3,6 @@
 {% block title %} Details {% endblock %}
 
 {% block content %}
-    <a href="{% url 'news:index' %}"> Show all news</a>
     <h1>Title: {{ news.title }}</h1>
     <h3>Content: {{ news.content }}</h3>
     <h3>Created at: {{ news.created_at }}</h3>
@@ -15,8 +14,8 @@
                 {{i.content}} - {{ i.created_at }}
             </li>
 
-            {% if user == comment.author %}
-            <form action="{% url 'news:delete_comment' i.id %}" method="post">
+            {% if user == i.author %}
+            <form action="{% url 'news:delete_comment' news.id i.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit">Удалить</button>
             </form>

@@ -3,20 +3,29 @@
 {% block title %} News {% endblock %}
 
 {% block content %}
-    <a href="{% url 'news:create_news' %}"> Add news</a>
-    <ol>
+<ol>
     {% for i in news %}
-        <li>
-            <a href="{% url 'news:detail' i.id %}">
-                {{ i.title }}
-            </a>
-        </li>
-        {% if user == news.author or perms.news.delete_news %}
-        <form action="{% url 'news:delete_news' i.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit">Удалить</button>
-        </form>
-        {% endif %}
+        <div class="card mt-2">
+            <div class="card-header"><strong>@{{ i.author.username }}</strong></div>
+            <div class="card-body d-flex flex-row justify-content-between">
+              <div>
+                <h5 class="card-title">
+                    <a href="{% url 'news:detail' i.id %}">{{i.title}}</a>
+                </h5>
+              </div>
+              <div>
+                {% if user == i.author or perms.news.delete_news %}
+                    <form action="{% url 'news:delete_news' i.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger" >Удалить</button>
+                    </form>
+                {% endif %}
+              </div>
+            </div>
+            <div class="card-footer text-muted">{{i.created_at}}</div>
+          </div>
+
+    {% empty %}
+        <p>Нет голосований</p>
     {% endfor %}
-    </ol>
 {% endblock %}
