@@ -7,11 +7,44 @@ from django.contrib.auth.models import Group
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required, permission_required
 
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 
 from .models import News, Comment
 from .forms import NewsForm, SignUpForm, CommentForm
+from .serializers import NewsSerializer
 
 # Create your views here.
+
+@api_view(["POST"])
+def news_add(request):
+    serializer = NewsSerializer(data=request.data)
+    if serializer.is_valid():
+        news = serializer.save(commit=False)
+        news.author = request.user
+        news.save()
+        return Response({"detail": "Successful added", "news_id": news.id})
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(["GET"])
+def news_get(request, news_id):
+    news = get_object_or_404(News, pk=news_id)
+    serializer = NewsSerializer(news)
+    return Response(serializer.data)
+
+@api_view(["DELETE"])
+def news_delete(request, news_id):
+    news = get_object_or_404(News, pk=news_id)
+    news.delete()
+    return Response("Successful deleted", status=status.HTTP_204_NO_CONTENT)
+
+@api_view(["GET"])
+def news_get_list(request):
+    news = News.objects.all()
+    serializer = NewsSerializer(news, many=True)    
+    return Response(serializer.data)
+
 def index(request):
     news = News.objects.all()
     context = {"news": news[::-1]}
@@ -20,12 +53,6 @@ def index(request):
 # @permission_required("news.add_comments", login_url="/login")
 def detail(request, news_id):
     news = get_object_or_404(News, pk=news_id)
-    # if request.method == "POST":
-    #     content = request.POST["content"]
-    #     comment = Comment(content=content, news_id=news_id, author=request.user)
-    #     comment.save()
-    #     return HttpResponseRedirect(reverse("news:detail", args=(news_id,)))
-    
     form = CommentForm(request.POST)
     if form.is_valid():
         comment = form.save(commit=False)

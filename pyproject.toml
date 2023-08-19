@@ -10,6 +10,7 @@ packages = [{include = "django_2_daoolet"}]
 python = "^3.11"
 django = "^4.2.4"
 django-debug-toolbar = "^4.2.0"
+djangorestframework = "^3.14.0"
 
 
 [build-system]
