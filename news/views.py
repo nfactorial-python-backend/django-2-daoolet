@@ -118,7 +118,6 @@ def sign_up(request):
 def delete_news(request, news_id):
     news = get_object_or_404(News, pk=news_id)
     if request.method == "POST":
-        print(request.user)
         if request.user == news.author or request.user.has_perm("news.delete_news"):
             news.delete()
     
